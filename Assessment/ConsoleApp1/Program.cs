@@ -62,16 +62,35 @@ namespace ConsoleApp1
             return rtn;
         }
 
+        public static bool CheckCollisionV3(Bullet b, Enemy e)
+        {
+            bool rtn = false;
+
+            Rectangle EnemyCol;
+            //sprites
+            float Ew = Enemy.Etexture.width * 1f;
+            float Eh = Enemy.Etexture.height * 1f;
+            EnemyCol = new Rectangle(e.Position.x, e.Position.y, Ew, Eh);
+
+            Rectangle BulletCol;
+            float Bw = Bullet.texture.width * 1f;
+            float Bh = Bullet.texture.height * 1f;
+            BulletCol = new Rectangle(b.Position.x - 15, b.Position.y + 5, 10, 40);
+            rtn = rl.CheckCollisionRecs(BulletCol, EnemyCol);
+            if (rtn) { e.isEnabled = false; }
+            return rtn;
+        }
+
         public static int Main()
         {
             // Initialization
             //--------------------------------------------------------------------------------------
             Random rand = new Random();
             Player player = new Player();
+            Bullet[] bullets = new Bullet[10];
             Pickup[] pickup = new Pickup[70];
             Enemy[] enemies = new Enemy[50];
             Enemy enemy = new Enemy();
-            Gun gun = new Gun();
 
             int screenWidth = 1600;
             int screenHeight = 900;
@@ -93,6 +112,15 @@ namespace ConsoleApp1
                 enemies[Enidx] = new Enemy();
                 enemies[Enidx].Position.x = rand.Next(20, screenWidth - 20);
                 enemies[Enidx].Position.y = rand.Next(30, screenHeight - 20);
+            }
+
+            //Create bullets
+            Bullet.SetTexture("platformPack_item004.png");
+            for (int idx = 0; idx < bullets.Length; idx++)
+            {
+                bullets[idx] = new Bullet();
+                bullets[idx].Position.x = player.Position.x;
+                bullets[idx].Position.y = player.Position.y;
             }
 
             //Create pickups
@@ -142,10 +170,10 @@ namespace ConsoleApp1
                 rl.BeginDrawing();
 
                 rl.ClearBackground(Color.LIGHTGRAY);
-                rl.DrawText("Score: " + score, 50, 50, 12,  Color.WHITE);
-                rl.DrawText("Health: " + health, 50, 75, 12, Color.WHITE);
-                rl.DrawText("Time: " + timer / 60, screenWidth - 200, 50, 12, Color.WHITE);
-                rl.DrawText("Ammo: " + ammo, screenWidth - 200, 80, 12, Color.WHITE);
+                rl.DrawText("Score: " + score, 50, 50, 12,  Color.BLACK);
+                rl.DrawText("Health: " + health, 50, 75, 12, Color.BLACK);
+                rl.DrawText("Time: " + timer / 60, screenWidth - 200, 50, 12, Color.BLACK);
+                rl.DrawText("Ammo: " + ammo, screenWidth - 200, 80, 12, Color.BLACK);
 
                 //if (timer/60 >= 30 && winState == false)
                 //{
@@ -162,7 +190,6 @@ namespace ConsoleApp1
                         if (CheckCollisionV2(player, en))
                         {
                             health--;
-                            score++;
                         }
 
                         //if (en.Position.x > player.Position.x)
@@ -180,6 +207,24 @@ namespace ConsoleApp1
                             rl.DrawText("Game Over", 250, 50, 20, Color.ORANGE);
                             rl.DrawText("BOI", 250, 75, 20, Color.ORANGE);
                             player.speed = 0;
+                        }
+                    }
+                }
+
+                foreach (Bullet bu in bullets)
+                {
+                    if (bu.Enabled)
+                    {
+                        bu.Draw();
+                        if (CheckCollisionV3(bu, enemy))
+                        {
+                            score++;
+                        }
+                        if (rl.IsKeyPressed(KeyboardKey.KEY_SPACE))
+                        {
+                            bu.Position.x = player.Position.x;
+                            bu.Position.y = player.Position.y;
+                            ammo--;
                         }
                     }
                 }

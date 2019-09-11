@@ -20,6 +20,9 @@
     <None Update="platformPack_item001.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="platformPack_item004.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="platformPack_item009.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
