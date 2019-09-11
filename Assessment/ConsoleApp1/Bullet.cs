@@ -15,11 +15,12 @@ namespace ConsoleApp1
     {
         public Vector2B Position = new Vector2B();
         public bool Enabled = true;
+        public bool bulletMove;
 
-        public void BulletUpdate()
-        {
-            Position.x = ;
-        }
+        //public void BulletUpdate()
+        //{
+        //    Position.x += ;
+        //}
 
         public void Draw()
         {

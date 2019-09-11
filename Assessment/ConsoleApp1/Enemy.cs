@@ -15,7 +15,7 @@ namespace ConsoleApp1
     {
         public Vector2E Position = new Vector2E();
         public Color color = Color.DARKPURPLE;
-        public bool isEnabled = true;
+        public bool Enabled = true;
 
         public static Texture2D Etexture;
 
@@ -26,7 +26,7 @@ namespace ConsoleApp1
 
         public void Draw()
         {
-            if (!isEnabled)
+            if (!Enabled)
                 return;
             rl.DrawTextureEx(Etexture, new Vector2(Position.x, Position.y), 0f, 1f, color);
         }

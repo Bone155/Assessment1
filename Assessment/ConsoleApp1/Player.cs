@@ -16,7 +16,7 @@ namespace ConsoleApp1
         public int speed = 5;
         public int timer = 0;
         public int health = 5;
-        public int ammo = 5;
+        public int ammo = 100;
         public int score = 0;
         public Vector2Int Position = new Vector2Int();
         public Color color = Color.BLUE;

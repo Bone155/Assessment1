@@ -58,7 +58,7 @@ namespace ConsoleApp1
 
             Rectangle PlayerCol = new Rectangle(pl.Position.x - 15, pl.Position.y + 5, 10, 40);
             rtn = rl.CheckCollisionRecs(PlayerCol, EnemyCol);
-            if (rtn) { e.isEnabled = false; }
+            if (rtn) { e.Enabled = false; }
             return rtn;
         }
         //Bullet collision with enemy
@@ -73,9 +73,9 @@ namespace ConsoleApp1
             EnemyCol = new Rectangle(e.Position.x, e.Position.y, Ew, Eh);
 
             Rectangle BulletCol;
-            BulletCol = new Rectangle(b.Position.x - 15, b.Position.y + 5, 10, 40);
+            BulletCol = new Rectangle(b.Position.x, b.Position.y, 6, 2);
             rtn = rl.CheckCollisionRecs(BulletCol, EnemyCol);
-            if (rtn) { e.isEnabled = false; }
+            if (rtn) { e.Enabled = false; }
             return rtn;
         }
 
@@ -86,6 +86,7 @@ namespace ConsoleApp1
             Random rand = new Random();
             Player player = new Player();
             Bullet[] bullets = new Bullet[10];
+            Bullet bullet = new Bullet();
             Pickup[] pickup = new Pickup[70];
             Enemy[] enemies = new Enemy[50];
             Enemy enemy = new Enemy();
@@ -116,8 +117,6 @@ namespace ConsoleApp1
             for (int idx = 0; idx < bullets.Length; idx++)
             {
                 bullets[idx] = new Bullet();
-                //bullets[idx].Position.x = player.Position.x;
-                //bullets[idx].Position.y = player.Position.y;
             }
 
             //Create pickups
@@ -161,6 +160,7 @@ namespace ConsoleApp1
                 // TODO: Update your variables here
                 //----------------------------------------------------------------------------------
                 player.RunUpdate();
+                //bullet.BulletUpdate();
                 timer++;
                 // Draw
                 //----------------------------------------------------------------------------------
@@ -181,7 +181,7 @@ namespace ConsoleApp1
                 player.Draw();
                 foreach (Enemy en in enemies)
                 {
-                    if (en.isEnabled)
+                    if (en.Enabled)
                     {
                         en.Draw();
                         if (CheckCollisionV2(player, en))
@@ -212,19 +212,26 @@ namespace ConsoleApp1
                 {
                     if (bu.Enabled)
                     {
+                        bu.Draw();
                         if (rl.IsKeyPressed(KeyboardKey.KEY_SPACE))
                         {
-                            bu.Draw();
-                            bu.Position.x = player.Position.x;
-                            bu.Position.y = player.Position.y;
+                            bu.Position.x = player.Position.x + 11;
+                            bu.Position.y = player.Position.y + 10;
+                            bu.bulletMove = true;
                             ammo--;
                         }
-                        if (CheckCollisionV3(bu, enemy))
+                        if (bu.bulletMove)
                         {
-                            score++;
+                            bu.Position.x += 5;
                         }
+                        score += CheckCollisionV3(bu, enemy) ? 1 : 0;
                         if (ammo <= 0)
+                        {
                             ammo = 0;
+                            bu.Enabled = false;
+                            if (ammo >= 0)
+                                bu.Enabled = true;
+                        }
                     }
                 }
 
