@@ -61,7 +61,7 @@ namespace ConsoleApp1
             if (rtn) { e.isEnabled = false; }
             return rtn;
         }
-
+        //Bullet collision with enemy
         public static bool CheckCollisionV3(Bullet b, Enemy e)
         {
             bool rtn = false;
@@ -73,8 +73,6 @@ namespace ConsoleApp1
             EnemyCol = new Rectangle(e.Position.x, e.Position.y, Ew, Eh);
 
             Rectangle BulletCol;
-            float Bw = Bullet.texture.width * 1f;
-            float Bh = Bullet.texture.height * 1f;
             BulletCol = new Rectangle(b.Position.x - 15, b.Position.y + 5, 10, 40);
             rtn = rl.CheckCollisionRecs(BulletCol, EnemyCol);
             if (rtn) { e.isEnabled = false; }
@@ -115,12 +113,11 @@ namespace ConsoleApp1
             }
 
             //Create bullets
-            Bullet.SetTexture("platformPack_item004.png");
             for (int idx = 0; idx < bullets.Length; idx++)
             {
                 bullets[idx] = new Bullet();
-                bullets[idx].Position.x = player.Position.x;
-                bullets[idx].Position.y = player.Position.y;
+                //bullets[idx].Position.x = player.Position.x;
+                //bullets[idx].Position.y = player.Position.y;
             }
 
             //Create pickups
@@ -215,17 +212,19 @@ namespace ConsoleApp1
                 {
                     if (bu.Enabled)
                     {
-                        bu.Draw();
-                        if (CheckCollisionV3(bu, enemy))
-                        {
-                            score++;
-                        }
                         if (rl.IsKeyPressed(KeyboardKey.KEY_SPACE))
                         {
+                            bu.Draw();
                             bu.Position.x = player.Position.x;
                             bu.Position.y = player.Position.y;
                             ammo--;
                         }
+                        if (CheckCollisionV3(bu, enemy))
+                        {
+                            score++;
+                        }
+                        if (ammo <= 0)
+                            ammo = 0;
                     }
                 }
 

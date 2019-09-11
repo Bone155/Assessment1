@@ -8,30 +8,24 @@ namespace ConsoleApp1
 {
     struct Vector2B
     {
-        public float x;
-        public float y;
+        public int x;
+        public int y;
     }
     class Bullet
     {
         public Vector2B Position = new Vector2B();
         public bool Enabled = true;
-        public static Texture2D texture;
 
         public void BulletUpdate()
         {
             Position.x = ;
         }
 
-        public static void SetTexture(string file)
-        {
-            texture = rl.LoadTexture(file);
-        }
-
         public void Draw()
         {
             if (!Enabled)
                 return;
-            rl.DrawTextureEx(texture, new Vector2(Position.x, Position.y), 0f, 1f, Color.BROWN);
+            rl.DrawRectangle(Position.x, Position.y, 6, 2, Color.VIOLET);
         }
     }
 }

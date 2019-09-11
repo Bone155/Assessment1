@@ -29,7 +29,6 @@ namespace ConsoleApp1
         public Ammo()
         {
             up = PickupType.Ammo;
-            ammo = 5;
         }
 
         public int getWidth()
@@ -64,7 +63,6 @@ namespace ConsoleApp1
         public Health()
         {
             up = PickupType.Health;
-            health = 5;
         }
 
         public int getWidth()
@@ -99,7 +97,6 @@ namespace ConsoleApp1
         public Score()
         {
             up = PickupType.Score;
-            score = 0;
         }
 
         public int getWidth()
