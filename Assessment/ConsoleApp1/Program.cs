@@ -152,16 +152,12 @@ namespace ConsoleApp1
             player.Position.x = rand.Next(20, screenWidth - 20);
             player.Position.y = rand.Next(30, screenHeight - 20);
 
-            File.LoadFile("Intro.txt");
-
             rl.SetTargetFPS(60);
 
-            if (rl.IsKeyPressed(KeyboardKey.KEY_P))
-            {
                 //--------------------------------------------------------------------------------------
 
                 // Main game loop
-                while (!rl.WindowShouldClose())    // Detect window close button or ESC key
+            while (!rl.WindowShouldClose())    // Detect window close button or ESC key
                 {
                     // Update
                     //----------------------------------------------------------------------------------
@@ -208,8 +204,9 @@ namespace ConsoleApp1
                             if (health <= 0)
                             {
                                 health = 0;
-                                rl.DrawText("Game Over", 250, 50, 20, Color.ORANGE);
-                                rl.DrawText("BOI", 250, 75, 20, Color.ORANGE);
+                                File.LoadFile("GO.txt");
+                                //rl.DrawText("Game Over", 250, 50, 20, Color.ORANGE);
+                                //rl.DrawText("BOI", 250, 75, 20, Color.ORANGE);
                                 player.speed = 0;
                             }
                         }
@@ -291,9 +288,6 @@ namespace ConsoleApp1
                     //    player.speed = 0;
                     //}
                 }
-
-
-            }
 
             // De-Initialization
             //--------------------------------------------------------------------------------------
