@@ -66,6 +66,7 @@ namespace ConsoleApp1
         public static bool CheckCollisionV3(Bullet b, Enemy e)
         {
             bool rtn = false;
+            if (!b.Enabled) return false ;
 
             Rectangle EnemyCol;
             //sprites
@@ -91,7 +92,6 @@ namespace ConsoleApp1
             Pickup[] pickup = new Pickup[70];
             Enemy[] enemies = new Enemy[50];
             Enemy enemy = new Enemy();
-            File file = new File();
 
             int screenWidth = 1000;
             int screenHeight = 900;
@@ -100,6 +100,7 @@ namespace ConsoleApp1
             int ammo = player.ammo;
             int score = player.score;
             int timer = 0;
+            int bulletpointer;
             bool winState = false;
             //rl.InitAudioDevice();
             //var pick = rl.LoadAudioStream("powerUp1.oog");
@@ -151,138 +152,147 @@ namespace ConsoleApp1
             player.Position.x = rand.Next(20, screenWidth - 20);
             player.Position.y = rand.Next(30, screenHeight - 20);
 
-            file.LoadFile(Intro.txt);
+            File.LoadFile("Intro.txt");
 
             rl.SetTargetFPS(60);
-            //--------------------------------------------------------------------------------------
 
-            // Main game loop
-            while (!rl.WindowShouldClose())    // Detect window close button or ESC key
+            if (rl.IsKeyPressed(KeyboardKey.KEY_P))
             {
-                // Update
-                //----------------------------------------------------------------------------------
-                // TODO: Update your variables here
-                //----------------------------------------------------------------------------------
-                player.RunUpdate();
-                //bullet.BulletUpdate();
-                timer++;
-                // Draw
-                //----------------------------------------------------------------------------------
-                rl.BeginDrawing();
+                //--------------------------------------------------------------------------------------
 
-                rl.ClearBackground(Color.LIGHTGRAY);
-                rl.DrawText("Score: " + score, 50, 50, 12,  Color.BLACK);
-                rl.DrawText("Health: " + health, 50, 75, 12, Color.BLACK);
-                rl.DrawText("Time: " + timer / 60, screenWidth - 200, 50, 12, Color.BLACK);
-                rl.DrawText("Ammo: " + ammo, screenWidth - 200, 80, 12, Color.BLACK);
+                // Main game loop
+                while (!rl.WindowShouldClose())    // Detect window close button or ESC key
+                {
+                    // Update
+                    //----------------------------------------------------------------------------------
+                    // TODO: Update your variables here
+                    //----------------------------------------------------------------------------------
+                    player.RunUpdate();
+                    timer++;
+                    // Draw
+                    //----------------------------------------------------------------------------------
+                    rl.BeginDrawing();
 
-                if (timer / 60 >= 60 && winState == false)
-                {
-                    rl.DrawText("Game Over", 250, 50, 20, Color.ORANGE);
-                    rl.DrawText("BOI", 250, 75, 20, Color.ORANGE);
-                    player.speed = 0;
-                }
-                player.Draw();
-                foreach (Enemy en in enemies)
-                {
-                    if (en.Enabled)
+                    rl.ClearBackground(Color.LIGHTGRAY);
+                    rl.DrawText("Score: " + score, 50, 50, 12,  Color.BLACK);
+                    rl.DrawText("Health: " + health, 50, 75, 12, Color.BLACK);
+                    rl.DrawText("Time: " + timer / 60, screenWidth - 200, 50, 12, Color.BLACK);
+                    rl.DrawText("Ammo: " + ammo, screenWidth - 200, 80, 12, Color.BLACK);
+
+                    //if (timer / 60 >= 60 && winState == false)
+                    //{
+                    //    rl.DrawText("Game Over", 250, 50, 20, Color.ORANGE);
+                    //    rl.DrawText("BOI", 250, 75, 20, Color.ORANGE);
+                    //    player.speed = 0;
+                    //}
+                    player.Draw();
+                    foreach (Enemy en in enemies)
                     {
-                        en.Draw();
-                        if (CheckCollisionV2(player, en))
+                        if (en.Enabled)
                         {
-                            health--;
-                        }
+                            en.Draw();
+                            if (CheckCollisionV2(player, en))
+                            {
+                                health--;
+                            }
 
-                        //if (en.Position.x > player.Position.x)
-                        //    en.Position.x-= 3;
-                        //if (en.Position.x < player.Position.x)
-                        //    en.Position.x+= 3;
-                        //if (en.Position.y > player.Position.y)
-                        //    en.Position.y-= 3;
-                        //if (en.Position.y < player.Position.y)
-                        //    en.Position.y+= 3;
+                            //if (en.Position.x > player.Position.x)
+                            //    en.Position.x-= 3;
+                            //if (en.Position.x < player.Position.x)
+                            //    en.Position.x+= 3;
+                            //if (en.Position.y > player.Position.y)
+                            //    en.Position.y-= 3;
+                            //if (en.Position.y < player.Position.y)
+                            //    en.Position.y+= 3;
 
-                        if (health <= 0)
-                        {
-                            health = 0;
-                            rl.DrawText("Game Over", 250, 50, 20, Color.ORANGE);
-                            rl.DrawText("BOI", 250, 75, 20, Color.ORANGE);
-                            player.speed = 0;
+                            if (health <= 0)
+                            {
+                                health = 0;
+                                rl.DrawText("Game Over", 250, 50, 20, Color.ORANGE);
+                                rl.DrawText("BOI", 250, 75, 20, Color.ORANGE);
+                                player.speed = 0;
+                            }
                         }
                     }
-                }
 
-                foreach (Bullet bu in bullets)
-                {
-                    if (bu.Enabled)
+                    if (rl.IsKeyPressed(KeyboardKey.KEY_SPACE))
                     {
-                        bu.Draw();
-                        if (rl.IsKeyPressed(KeyboardKey.KEY_SPACE))
+                        bulletpointer = bullet.findDisableBullet(bullets);
+                        bullets[bulletpointer].Position.x = player.Position.x + 11;
+                        bullets[bulletpointer].Position.y = player.Position.y + 10;
+                        bullets[bulletpointer].bulletMove = true;
+                        bullets[bulletpointer].Enabled = true;
+                        ammo--;
+                    }
+
+                    foreach (Bullet bu in bullets)
+                    {
+                        if (bu.Enabled)
                         {
-                            bu.Position.x = player.Position.x + 11;
-                            bu.Position.y = player.Position.y + 10;
-                            bu.bulletMove = true;
-                            ammo--;
-                        }
-                        if (bu.bulletMove)
-                        {
-                            bu.Position.x += 5;
-                        }
-                        score += CheckCollisionV3(bu, enemy) ? 1 : 0;
-                        if (ammo <= 0)
-                        {
-                            ammo = 0;
-                            bu.Enabled = false;
-                            if (ammo > -1)
-                                bu.Enabled = true;
+                            bu.Draw();
+                            if (bu.bulletMove)
+                            {
+                                bu.Position.x += 5;
+                            }
+                            score += CheckCollisionV3(bu, enemy) ? 1 : 0;
+                            if (ammo <= 0)
+                            {
+                                ammo = 0;
+                                bu.Enabled = false;
+                                if (ammo > -1)
+                                    bu.Enabled = true;
+                            }
                         }
                     }
-                }
 
-                foreach (Pickup pick in pickup)
-                {
-                    if (pick.Enabled)
+                    foreach (Pickup pick in pickup)
                     {
-                        switch (pick.up)
+                        if (pick.Enabled)
                         {
-                            case Pickup.PickupType.Ammo:
-                                ((Ammo)pick).Draw();
-                                ammo += CheckCollisionV1(player, pick) ? 1 : 0;//adds one to variable
-                                break;
-                            case Pickup.PickupType.Health:
-                                ((Health)pick).Draw();
-                                health += CheckCollisionV1(player, pick) ? 1 : 0;
-                                break;
-                            case Pickup.PickupType.Score:
-                                ((Score)pick).Draw();
-                                if (CheckCollisionV1(player, pick))
-                                    score+= rand.Next(1, 11);
-                                break;
-                            default:
-                                break;
+                            switch (pick.up)
+                            {
+                                case Pickup.PickupType.Ammo:
+                                    ((Ammo)pick).Draw();
+                                    ammo += CheckCollisionV1(player, pick) ? 1 : 0;//adds one to variable
+                                    break;
+                                case Pickup.PickupType.Health:
+                                    ((Health)pick).Draw();
+                                    health += CheckCollisionV1(player, pick) ? 1 : 0;
+                                    break;
+                                case Pickup.PickupType.Score:
+                                    ((Score)pick).Draw();
+                                    if (CheckCollisionV1(player, pick))
+                                        score+= rand.Next(1, 11);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            //rl.PlayAudioStream(pick);
                         }
-
-                        //rl.PlayAudioStream(pick);
                     }
-                }
-                //Player screen Warps
-                if (player.Position.x <= 0)
-                    player.Position.x = screenWidth - 1;
-                if (player.Position.x >= screenWidth)
-                    player.Position.x = 0;
-                if (player.Position.y <= 0)
-                    player.Position.y = screenHeight - 1;
-                if (player.Position.y >= screenHeight)
-                    player.Position.y = 0;
+                    
+                    //Player screen Warps
+                    if (player.Position.x <= 0)
+                        player.Position.x = screenWidth - 1;
+                    if (player.Position.x >= screenWidth)
+                        player.Position.x = 0;
+                    if (player.Position.y <= 0)
+                        player.Position.y = screenHeight - 1;
+                    if (player.Position.y >= screenHeight)
+                        player.Position.y = 0;
 
-                rl.EndDrawing();
-                //----------------------------------------------------------------------------------
-                //if (score.score >= 10)
-                //{
-                //    rl.DrawText("Oh goody, you survived", 250, 50, 20, Color.ORANGE);
-                //    //winState = true;
-                //    player.speed = 0;
-                //}
+                    rl.EndDrawing();
+                    //----------------------------------------------------------------------------------
+                    //if (score.score >= 10)
+                    //{
+                    //    rl.DrawText("Oh goody, you survived", 250, 50, 20, Color.ORANGE);
+                    //    //winState = true;
+                    //    player.speed = 0;
+                    //}
+                }
+
+
             }
 
             // De-Initialization
