@@ -151,7 +151,7 @@ namespace ConsoleApp1
             player.Position.x = rand.Next(20, screenWidth - 20);
             player.Position.y = rand.Next(30, screenHeight - 20);
 
-            file.LoadFile();
+            file.LoadFile(Intro.txt);
 
             rl.SetTargetFPS(60);
             //--------------------------------------------------------------------------------------
