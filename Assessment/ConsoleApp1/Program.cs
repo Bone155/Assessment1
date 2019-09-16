@@ -1,6 +1,7 @@
 ﻿using Raylib;
 using rl = Raylib.Raylib;
 using System;
+using System.IO;
 
 namespace ConsoleApp1
 {
@@ -90,15 +91,16 @@ namespace ConsoleApp1
             Pickup[] pickup = new Pickup[70];
             Enemy[] enemies = new Enemy[50];
             Enemy enemy = new Enemy();
+            File file = new File();
 
-            int screenWidth = 1600;
+            int screenWidth = 1000;
             int screenHeight = 900;
 
             int health = player.health;
             int ammo = player.ammo;
             int score = player.score;
             int timer = 0;
-            //bool winState = false;
+            bool winState = false;
             //rl.InitAudioDevice();
             //var pick = rl.LoadAudioStream("powerUp1.oog");
 
@@ -149,6 +151,8 @@ namespace ConsoleApp1
             player.Position.x = rand.Next(20, screenWidth - 20);
             player.Position.y = rand.Next(30, screenHeight - 20);
 
+            file.LoadFile();
+
             rl.SetTargetFPS(60);
             //--------------------------------------------------------------------------------------
 
@@ -172,12 +176,12 @@ namespace ConsoleApp1
                 rl.DrawText("Time: " + timer / 60, screenWidth - 200, 50, 12, Color.BLACK);
                 rl.DrawText("Ammo: " + ammo, screenWidth - 200, 80, 12, Color.BLACK);
 
-                //if (timer/60 >= 30 && winState == false)
-                //{
-                //    rl.DrawText("Game Over", 250, 50, 20, Color.ORANGE);
-                //    rl.DrawText("BOI", 250, 75, 20, Color.ORANGE);
-                //    player.speed = 0;
-                //}
+                if (timer / 60 >= 60 && winState == false)
+                {
+                    rl.DrawText("Game Over", 250, 50, 20, Color.ORANGE);
+                    rl.DrawText("BOI", 250, 75, 20, Color.ORANGE);
+                    player.speed = 0;
+                }
                 player.Draw();
                 foreach (Enemy en in enemies)
                 {
@@ -229,7 +233,7 @@ namespace ConsoleApp1
                         {
                             ammo = 0;
                             bu.Enabled = false;
-                            if (ammo >= 0)
+                            if (ammo > -1)
                                 bu.Enabled = true;
                         }
                     }
@@ -259,7 +263,6 @@ namespace ConsoleApp1
                         }
 
                         //rl.PlayAudioStream(pick);
-                        //score.score += CheckCollisionV1(player, pick) ? 1 : 0;
                     }
                 }
                 //Player screen Warps
