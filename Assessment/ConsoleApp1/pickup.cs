@@ -17,15 +17,18 @@ namespace ConsoleApp1
         public enum PickupType  { Ammo, Health, Score};
         public PickupType up;
         public Vector2P Position = new Vector2P();
+
         public bool Enabled = true;
     }
 
     class Ammo : Pickup
     {
-        public int ammo;
-        public static Texture2D texture;
         public static int width;
         public static int height;
+
+        public int ammo;
+        public static Texture2D texture;
+
         public Ammo()
         {
             up = PickupType.Ammo;
@@ -50,16 +53,19 @@ namespace ConsoleApp1
         {
             if (!(Enabled))
                 return;
+
             rl.DrawTextureEx(texture, new Vector2(Position.x, Position.y), 0f, 1f, Color.RED);
         }
     }
 
     class Health : Pickup
     {
-        public int health;
         public static Texture2D texture;
+
+        public int health;
         public int width;
         public int height;
+
         public Health()
         {
             up = PickupType.Health;
@@ -84,16 +90,19 @@ namespace ConsoleApp1
         {
             if (!(Enabled))
                 return;
+
             rl.DrawTextureEx(texture, new Vector2(Position.x, Position.y), 0f, 1f, Color.RED);
         }
     }
 
     class Score : Pickup
     {
-        public int score;
         public static Texture2D texture;
+
+        public int score;
         public int width;
         public int height;
+
         public Score()
         {
             up = PickupType.Score;
@@ -118,6 +127,7 @@ namespace ConsoleApp1
         {
             if (!(Enabled))
                 return;
+
             rl.DrawTextureEx(texture, new Vector2(Position.x, Position.y), 0f, 1f, Color.RED);
         }
     }

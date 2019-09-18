@@ -11,13 +11,15 @@ namespace ConsoleApp1
         public int x;
         public int y;
     }
+
     class Enemy
     {
+        public static Texture2D Etexture;
+
         public Vector2E Position = new Vector2E();
         public Color color = Color.DARKPURPLE;
-        public bool Enabled = true;
 
-        public static Texture2D Etexture;
+        public bool Enabled = true;
 
         public static void EnemyTexture(string file)
         {
@@ -28,6 +30,7 @@ namespace ConsoleApp1
         {
             if (!Enabled)
                 return;
+
             rl.DrawTextureEx(Etexture, new Vector2(Position.x, Position.y), 0f, 1f, color);
         }
     }

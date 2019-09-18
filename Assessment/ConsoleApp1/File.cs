@@ -36,10 +36,9 @@ namespace ConsoleApp1
                 NumberOfLines = 0;
                 //and read in the data
                 while (!sr.EndOfStream)
-                {
                     rtn[NumberOfLines++] = sr.ReadLine();
-                }
             }
+
             return rtn;
         }
     }
