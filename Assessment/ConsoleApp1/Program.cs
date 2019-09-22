@@ -107,7 +107,6 @@ namespace ConsoleApp1
             Random rand = new Random();
             Player player = new Player();
             Bullet[] bullets = new Bullet[10];
-            Bullet bullet = new Bullet();
             Pickup[] pickup = new Pickup[70];
             Enemy[] enemies = new Enemy[50];
             string[] contents = File.LoadFile("GO.txt");
