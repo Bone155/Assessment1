@@ -119,7 +119,12 @@ namespace ConsoleApp1
             int score = player.score;
             int timer = 0;
             int bulletpointer;
+            int gameOverTimer = 0;
             bool winState = false;
+            string username = "";
+
+            Console.WriteLine("What is your name?");
+            username = Console.ReadLine();
 
             rl.InitWindow(screenWidth, screenHeight, "Assessment");
 
@@ -192,16 +197,28 @@ namespace ConsoleApp1
                 if (timer / 60 >= 60 && winState == false)
                 {
                     rl.DrawText(contents[0], 250, 50, 20, Color.ORANGE);
+                    Console.WriteLine(gameOverTimer);
 
                     player.speed = 0;
+                    ++gameOverTimer;
+
+                    if (gameOverTimer > 60 * 5)
+                    {
+                        File.SaveScore(username, score);
+                        return 0;
+                    }
                 }
 
                 player.Draw();
+
+                bool NotAllEnemiesDead = false;
 
                 foreach (Enemy en in enemies)
                 {
                     if (en.Enabled)
                     {
+                        NotAllEnemiesDead = true;
+
                         en.Draw();
 
                         if (CheckCollisionV2(player, en))
@@ -224,7 +241,30 @@ namespace ConsoleApp1
                             health = 0;
                             rl.DrawText(contents[0], 250, 50, 20, Color.ORANGE);
                             player.speed = 0;
+
+                            ++gameOverTimer;
+
+                            if (gameOverTimer > 60 * 5)
+                            {
+                                File.SaveScore(username, score);
+                                return 0;
+                            }
                         }
+                    }
+                }
+
+                if(NotAllEnemiesDead == false)
+                {
+                    //Display win
+                    rl.DrawText("You won!", 250, 50, 20, Color.ORANGE);
+
+                    winState = true;
+                    ++gameOverTimer;
+
+                    if (gameOverTimer > 60 * 5)
+                    {
+                        File.SaveScore(username, score);
+                        return 0;
                     }
                 }
 

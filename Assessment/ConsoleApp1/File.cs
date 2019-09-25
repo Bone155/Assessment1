@@ -7,6 +7,8 @@ namespace ConsoleApp1
 {
     class File
     {
+        public const string FileName = "ScoreTable.txt";
+
         public static string[] LoadFile(string filename)
         {
             string[] rtn;
@@ -40,6 +42,37 @@ namespace ConsoleApp1
             }
 
             return rtn;
+        }
+
+        public static void SaveScore(string Name, int Score)
+        {
+            string[] rtn;
+            int NumberOfLines = 0;
+
+            using (StreamReader sr = new StreamReader(FileName))
+            {
+                while (!sr.EndOfStream)
+                {
+                    sr.ReadLine();
+                    NumberOfLines++;
+                }
+
+                sr.BaseStream.Position = 0;
+                sr.DiscardBufferedData();
+                rtn = new string[NumberOfLines];
+                NumberOfLines = 0;
+
+                while (!sr.EndOfStream)
+                    rtn[NumberOfLines++] = sr.ReadLine();
+            }
+
+            using (StreamWriter sw = new StreamWriter(FileName))
+            {
+                for (int i = 0; i < NumberOfLines; i++)
+                    sw.WriteLine(rtn[i]);
+
+                sw.WriteLine(Name + " - " + Score);
+            }
         }
     }
 }
